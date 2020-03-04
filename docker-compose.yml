@@ -1,0 +1,40 @@
+version: "3"
+services:
+  web:
+    build: .
+    tty: true
+    ports:
+    - "80:80"
+    - "443:443"
+    - "3306:3306"
+    - "22:22"
+    environment:
+    - DEBIAN_FRONTEND=noninteractive
+    - TZ=UTC
+    expose:
+      - "80"
+      - "443"
+      - "3306"
+      - "22"
+    volumes:
+      - ./www/site:/var/www/html/site
+      - ./conf/nginx/sites-available:/etc/nginx/sites-available
+      - ./conf/supervisor:/etc/supervisor/conf.d
+    networks:
+      - app-network
+#  db:
+#    image: mariadb
+#    tty: true
+#    ports:
+#    - "3306:3306"
+#    environment:
+#    - MYSQL_ROOT_PASSWORD=root
+#    - MYSQL_USER=root
+#    - TZ=Europe/Madrid
+#    networks:
+#      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
