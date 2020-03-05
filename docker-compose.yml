@@ -11,14 +11,17 @@ services:
     environment:
     - DEBIAN_FRONTEND=noninteractive
     - TZ=UTC
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_USER=root
     expose:
       - "80"
       - "443"
       - "3306"
       - "22"
     volumes:
-      - ./www/site:/var/www/html/site
-      - ./conf/nginx/sites-available:/etc/nginx/sites-available
+      - ./certs:/certs:ro
+      - ./www/site:/var/www/html/site:rw
+      - ./conf/nginx/sites-enabled:/etc/nginx/sites-enabled:rw
       - ./conf/supervisor:/etc/supervisor/conf.d
     networks:
       - app-network

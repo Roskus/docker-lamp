@@ -1,5 +1,8 @@
 # docker-lamp
 
+# SO
+* Ubuntu 18.04
+
 # Software
 * nginx
 * supervisor

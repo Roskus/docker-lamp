@@ -1,5 +1,7 @@
 #
 # Lamp Dockerfile
+# @author Gustavo Novaro
+# @version 1.0.1
 # Check syntax with online linter: https://www.fromlatest.io/
 # https://github.com/gnovaro/docker-lamp
 #
@@ -7,6 +9,7 @@ FROM ubuntu:18.04
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-c"]
 RUN apt-get update
+
 # Add php repo
 RUN apt -y install software-properties-common
 RUN add-apt-repository ppa:ondrej/php
@@ -14,12 +17,15 @@ RUN apt-get update
 
 # Install linux utils
 RUN apt-get install -y --no-install-recommends --no-install-suggests git vim htop mc supervisor curl zip unzip net-tools wget openssl
+
 # Install webserver
 RUN apt-get install -y nginx
 RUN chown -R www-data:www-data /var/lib/nginx
-RUN rm /etc/nginx/sites-enabled/default
-RUN cd /etc/nginx/sites-enabled; ln -s /etc/nginx/sites-available/site.conf 
 
+#RUN rm /etc/nginx/sites-enabled/default
+#RUN cd /etc/nginx/sites-enabled; ln -s /etc/nginx/sites-available/site.conf 
+
+# TimeZone
 RUN apt-get install -y tzdata
 
 # PHP and modules
@@ -41,20 +47,23 @@ RUN apt-get install -y \
 	php7.4-iconv \
 	php7.4-bcmath
 
+# Fix fpm run dir
+RUN mkdir -p /run/php
+
 # Install php pear PECL
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y php-pear
 
 # Install php composer
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y composer
 
-# Install mail
+# Install SMTP mail server
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y postfix
 
 # Config supervisor
 COPY ./conf/supervisord.conf /etc/supervisor/supervisord.conf
 
-# Install php redis extension
-#RUN DEBIAN_FRONTEND=noninteractive pecl install -y redis 
+# Php config
+COPY ./conf/php.ini /etc/php/7.4/fpm/php.ini
 
 # Run supervisor
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
