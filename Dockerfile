@@ -22,9 +22,6 @@ RUN apt-get install -y --no-install-recommends --no-install-suggests git vim hto
 RUN apt-get install -y nginx
 RUN chown -R www-data:www-data /var/lib/nginx
 
-#RUN rm /etc/nginx/sites-enabled/default
-#RUN cd /etc/nginx/sites-enabled; ln -s /etc/nginx/sites-available/site.conf 
-
 # TimeZone
 RUN apt-get install -y tzdata
 
@@ -58,6 +55,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y composer
 
 # Install SMTP mail server
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y postfix
+
+# Install MariaDB
+RUN apt-get install -y mariadb-server mariadb-client
+#RUN mkdir -p /var/run/mysqld
+#RUN touch /var/run/mysqld/mysqld.sock
+#RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
 
 # Config supervisor
 COPY ./conf/supervisord.conf /etc/supervisor/supervisord.conf
