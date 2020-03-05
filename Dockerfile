@@ -1,7 +1,7 @@
 #
 # Lamp Dockerfile
 # @author Gustavo Novaro
-# @version 1.0.1
+# @version 1.0.2
 # Check syntax with online linter: https://www.fromlatest.io/
 # https://github.com/gnovaro/docker-lamp
 #
@@ -61,9 +61,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y postfix
 
 # Install MariaDB
 RUN apt-get install -y mariadb-server mariadb-client
-#RUN mkdir -p /var/run/mysqld
-#RUN touch /var/run/mysqld/mysqld.sock
-#RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
 
 # Config supervisor
 COPY ./conf/supervisord.conf /etc/supervisor/supervisord.conf
