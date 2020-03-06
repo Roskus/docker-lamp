@@ -23,7 +23,7 @@ services:
       - ./www/site:/var/www/html/site:rw
       - ./conf/nginx/sites-enabled:/etc/nginx/sites-enabled:rw
       - ./conf/supervisor:/etc/supervisor/conf.d
-      #- ./data/mariadb:/var/lib/mysql
+      - ./data/mariadb:/var/lib/mysql
     networks:
       - app-network
 #  db:
