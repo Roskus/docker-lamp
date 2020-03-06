@@ -1,13 +1,13 @@
 #
-# Lamp Dockerfile
+# LAMP Dockerfile NGINX
 # @author Gustavo Novaro
-# @version 1.0.2
+# @version 1.0.3
 # Check syntax with online linter: https://www.fromlatest.io/
 # https://github.com/gnovaro/docker-lamp
 #
 FROM ubuntu:18.04
 ENV DEBIAN_FRONTEND=noninteractive
-SHELL ["/bin/bash", "-c"]
+
 RUN apt-get update
 
 # Add php repo
@@ -17,17 +17,17 @@ RUN apt-get update
 
 # Install linux utils
 RUN apt-get install -y --no-install-recommends --no-install-suggests \
+	curl \
 	git \
-	vim \
 	htop \
 	mc \
-	supervisor \
-	curl \
-	zip \
-	unzip \
 	net-tools \
+	openssl \
+	supervisor \
+	unzip \
+	vim \
 	wget \
-	openssl
+	zip
 
 # Install webserver
 RUN apt-get install -y nginx

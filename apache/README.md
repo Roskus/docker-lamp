@@ -20,4 +20,11 @@
 * htop
 
 ## Build
-docker build -t lamp-apache .
+```console
+docker-compose up --build
+```
+
+## Run
+```console
+docker run -it lamp-apache
+```

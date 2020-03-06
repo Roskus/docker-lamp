@@ -1,0 +1,22 @@
+version: "3"
+services:
+  web:
+    build: .
+    image: lamp-apache
+    tty: true
+    ports:
+    - "80:80"
+    - "443:443"
+    - "3306:3306"
+    - "22:22"
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+      - TZ=UTC
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=root
+    expose:
+      - "80"
+      - "443"
+      - "3306"
+      - "22"
+  

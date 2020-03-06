@@ -1,8 +1,11 @@
 # 
-# Dockerfile LAMP Apache
+# LAMP Dockerfile Apache
+# @author Gustavo Novaro
+# @version 1.0.2
+# Check syntax with online linter: https://www.fromlatest.io/
+# https://github.com/gnovaro/docker-lamp
 # 
 FROM ubuntu:18.04
-
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
@@ -15,13 +18,17 @@ RUN apt-get update
 
 # Linux utils
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    git \
-    curl \
-    vim \ 
-    net-tools \
-    zip \
-    unzip \
-    wget
+	curl \
+	git \
+	htop \
+	mc \
+	net-tools \
+	openssl \
+	supervisor \
+	unzip \
+	vim \
+	wget \
+	zip
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	php7.3 \
@@ -51,6 +58,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	php7.3-readline \
 	php7.3-recode \
 	php7.3-snmp \
+	php7.3-soap \
 	php7.3-sqlite3 \
 	php7.3-sybase \
 	php7.3-tidy \
@@ -60,22 +68,26 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 # Fix fpm run dir
 RUN mkdir -p /run/php
+# php.ini
+#COPY .conf/php.ini /etc/php/7.3/apache2/php.ini
 
 # Install composer after php
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y composer
 
 # Install apache web server
-RUN DEBIAN_FRONTEND=noninteractive apt-get install apache2 libapache2-mod-php7.3 -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apache2 libapache2-mod-php7.3 libapache2-mod-security2
 RUN a2enmod rewrite
 RUN a2enmod headers
+RUN a2enmod cache
+RUN a2enmod expires
+RUN a2enmod ssl
+RUN a2enmod proxy
+
+# Default config for mod_security
+RUN cp /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
 
 # Install mariadb
 RUN DEBIAN_FRONTEND=noninteractive apt-get install mariadb-common mariadb-server mariadb-client -y
 
 # Install smtp mail server
 RUN DEBIAN_FRONTEND=noninteractive apt-get install postfix -y
-
-EXPOSE 80
-EXPOSE 443
-EXPOSE 3306
-EXPOSE 22
