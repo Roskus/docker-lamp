@@ -1,7 +1,7 @@
 # 
 # LAMP Dockerfile Apache
 # @author Gustavo Novaro
-# @version 1.0.2
+# @version 1.0.4
 # Check syntax with online linter: https://www.fromlatest.io/
 # https://github.com/gnovaro/docker-lamp
 # 
@@ -9,11 +9,18 @@ FROM ubuntu:18.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
-RUN apt-get upgrade -y
+#RUN apt-get upgrade -y
+
+# Add common
+RUN apt-get install software-properties-common -y
 
 # Add php repo
-RUN apt-get install software-properties-common -y
 RUN add-apt-repository ppa:ondrej/php -y
+
+# Let’s Encrypt repository
+RUN add-apt-repository ppa:certbot/certbot -y
+
+# Update repos
 RUN apt-get update
 
 # Linux utils
@@ -86,8 +93,14 @@ RUN a2enmod proxy
 # Default config for mod_security
 RUN cp /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
 
+# Install cerbot
+#RUN DEBIAN_FRONTEND=noninteractive app-get install certbot -y
+
 # Install mariadb
 RUN DEBIAN_FRONTEND=noninteractive apt-get install mariadb-common mariadb-server mariadb-client -y
 
 # Install smtp mail server
 RUN DEBIAN_FRONTEND=noninteractive apt-get install postfix -y
+
+# Install Dovecot (MDA, Mail Deliver Agent)
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y dovecot-imapd dovecot-pop3d
