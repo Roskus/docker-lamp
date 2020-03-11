@@ -6,6 +6,7 @@
 # https://github.com/gnovaro/docker-lamp
 # 
 FROM ubuntu:18.04
+LABEL Description="LAMP" Vendor="Roskus" version="1.0.4"
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
@@ -104,3 +105,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install postfix -y
 
 # Install Dovecot (MDA, Mail Deliver Agent)
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y dovecot-imapd dovecot-pop3d
+
+# Config supervisor
+COPY ./conf/supervisord.conf /etc/supervisor/supervisord.conf
+
+# Php config
+#COPY ./conf/php.ini /etc/php/7.3/fpm/php.ini
+
+# Run supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
