@@ -1,12 +1,12 @@
-# 
+#
 # LAMP Dockerfile Apache
 # @author Gustavo Novaro
-# @version 1.0.4
+# @version 1.0.5
 # Check syntax with online linter: https://www.fromlatest.io/
 # https://github.com/gnovaro/docker-lamp
-# 
+#
 FROM ubuntu:18.04
-LABEL Description="LAMP" Vendor="Roskus" version="1.0.4"
+LABEL Description="LAMP" Vendor="Roskus" version="1.0.5"
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
@@ -37,6 +37,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	vim \
 	wget \
 	zip
+
+# TimeZone
+RUN apt-get install -y tzdata
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	php7.3 \
@@ -78,6 +81,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 RUN mkdir -p /run/php
 # php.ini
 #COPY .conf/php.ini /etc/php/7.3/apache2/php.ini
+
+# Install php pear PECL
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y php-pear
 
 # Install composer after php
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y composer
